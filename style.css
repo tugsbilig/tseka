@@ -18,8 +18,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vw;
   border: none;
   z-index: -1; /* Send the iframe behind other content */
 }
@@ -28,7 +28,27 @@ body {
   background: rgba(0, 0, 0, 0.7);
   padding: 30px;
   border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+/* Mobile-friendly styles */
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+  @media (max-width: 768px) {
+    .background-frame {
+      width: 100%;
+      height: 100vh;
+    }
+  }
 
 input {
   padding: 10px;
@@ -98,4 +118,11 @@ video {
   margin-right: auto;
   /* Rotating the video horizontally (flip horizontally) */
   transform: rotateY(0deg);
+}
+h1 {
+  font-size: 1.5rem;
+}
+
+p {
+  font-size: 1rem;
 }
