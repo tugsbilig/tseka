@@ -16,19 +16,6 @@
       position: relative;
     }
 
-    /* Delete button for images */
-    .delete-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 5px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
     /* Style for the modal */
     .modal {
       display: none;
@@ -72,8 +59,12 @@
 
   <div class="container">
     <h1>📸 Our Precious Moments 📸</h1>
-    <input type="file" id="imageUpload" accept="image/*">
-    <div id="gallery"></div>
+    <div id="gallery">
+      <img src="img/tseka1.jpg" class="gallery-image" onclick="showModal('img/tseka1.jpg')" alt="Image 1">
+      <img src="img/tseka2.jpg" class="gallery-image" onclick="showModal('img/tseka1.jpg')" alt="Image 2">
+      <img src="img/tseka3.jpg" class="gallery-image" onclick="showModal('img/tseka1.jpg')" alt="Image 3">
+      <img src="img/tseka4.jpg" class="gallery-image" onclick="showModal('img/tseka1.jpg')" alt="Image 4">
+    </div>
     <a href="birthday.html" class="btn">Back to Home</a>
   </div>
 
@@ -84,76 +75,9 @@
   </div>
 
   <script>
-    const imageUpload = document.getElementById('imageUpload');
-    const gallery = document.getElementById('gallery');
     const modal = document.getElementById('imageModal');
     const modalImage = document.getElementById('modalImage');
     const closeBtn = document.querySelector('.close-btn');
-
-    // Function to display images from localStorage
-    function loadImages() {
-      const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
-      gallery.innerHTML = '';  // Clear gallery before adding new images
-      images.forEach((imgSrc, index) => {
-        const imgWrapper = document.createElement('div');
-        const img = document.createElement('img');
-        img.src = imgSrc;
-        img.classList.add('gallery-image');
-
-        // Create delete button
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('delete-btn');
-        deleteBtn.textContent = 'X';
-        deleteBtn.addEventListener('click', function() {
-          deleteImage(index);  // Delete the image when clicked
-        });
-
-        img.addEventListener('click', function() {
-          showModal(imgSrc);  // Show the clicked image in the modal
-        });
-
-        imgWrapper.appendChild(img);
-        imgWrapper.appendChild(deleteBtn);
-        gallery.appendChild(imgWrapper);
-      });
-    }
-
-    // Handle image upload
-    imageUpload.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          const imgSrc = event.target.result;
-          const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
-          images.push(imgSrc);  // Add the new image to the array
-          localStorage.setItem('uploadedImages', JSON.stringify(images));  // Store it in localStorage
-
-          // Add the new image to the gallery
-          const imgWrapper = document.createElement('div');
-          const img = document.createElement('img');
-          img.src = imgSrc;
-          img.classList.add('gallery-image');
-
-          // Create delete button
-          const deleteBtn = document.createElement('button');
-          deleteBtn.classList.add('delete-btn');
-          deleteBtn.textContent = 'X';
-          deleteBtn.addEventListener('click', function() {
-            deleteImage(images.length - 1);  // Delete the image when clicked
-          });
-
-          img.addEventListener('click', function() {
-            showModal(imgSrc);  // Show the clicked image in the modal
-          });
-
-          imgWrapper.appendChild(img);
-          imgWrapper.appendChild(deleteBtn);
-          gallery.appendChild(imgWrapper);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
 
     // Function to show the image in the modal
     function showModal(imgSrc) {
@@ -165,19 +89,6 @@
     closeBtn.addEventListener('click', function() {
       modal.classList.remove('show');
     });
-
-    // Function to delete an image from localStorage and gallery
-    function deleteImage(index) {
-      const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
-      images.splice(index, 1);  // Remove the image from the array
-      localStorage.setItem('uploadedImages', JSON.stringify(images));  // Update localStorage
-
-      // Reload the gallery to reflect changes
-      loadImages();
-    }
-
-    // Load images from localStorage when the page is loaded
-    loadImages();
   </script>
 
 </body>
