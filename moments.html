@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Moments</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Style for the gallery images */
+    .gallery-image {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      cursor: pointer;
+      object-fit: cover;
+      position: relative;
+    }
+
+    /* Delete button for images */
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Style for the modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Close button for the modal */
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Style for the modal background when open */
+    .modal.show {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <iframe src="DNAheart.html" class="background-frame"></iframe> 
+
+  <div class="container">
+    <h1>📸 Our Precious Moments 📸</h1>
+    <input type="file" id="imageUpload" accept="image/*">
+    <div id="gallery"></div>
+    <a href="birthday.html" class="btn">Back to Home</a>
+  </div>
+
+  <!-- Modal for viewing the image in a larger size -->
+  <div id="imageModal" class="modal">
+    <span class="close-btn">&times;</span>
+    <img id="modalImage" class="modal-content" src="" alt="Larger view">
+  </div>
+
+  <script>
+    const imageUpload = document.getElementById('imageUpload');
+    const gallery = document.getElementById('gallery');
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const closeBtn = document.querySelector('.close-btn');
+
+    // Function to display images from localStorage
+    function loadImages() {
+      const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+      gallery.innerHTML = '';  // Clear gallery before adding new images
+      images.forEach((imgSrc, index) => {
+        const imgWrapper = document.createElement('div');
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.classList.add('gallery-image');
+
+        // Create delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.textContent = 'X';
+        deleteBtn.addEventListener('click', function() {
+          deleteImage(index);  // Delete the image when clicked
+        });
+
+        img.addEventListener('click', function() {
+          showModal(imgSrc);  // Show the clicked image in the modal
+        });
+
+        imgWrapper.appendChild(img);
+        imgWrapper.appendChild(deleteBtn);
+        gallery.appendChild(imgWrapper);
+      });
+    }
+
+    // Handle image upload
+    imageUpload.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const imgSrc = event.target.result;
+          const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+          images.push(imgSrc);  // Add the new image to the array
+          localStorage.setItem('uploadedImages', JSON.stringify(images));  // Store it in localStorage
+
+          // Add the new image to the gallery
+          const imgWrapper = document.createElement('div');
+          const img = document.createElement('img');
+          img.src = imgSrc;
+          img.classList.add('gallery-image');
+
+          // Create delete button
+          const deleteBtn = document.createElement('button');
+          deleteBtn.classList.add('delete-btn');
+          deleteBtn.textContent = 'X';
+          deleteBtn.addEventListener('click', function() {
+            deleteImage(images.length - 1);  // Delete the image when clicked
+          });
+
+          img.addEventListener('click', function() {
+            showModal(imgSrc);  // Show the clicked image in the modal
+          });
+
+          imgWrapper.appendChild(img);
+          imgWrapper.appendChild(deleteBtn);
+          gallery.appendChild(imgWrapper);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Function to show the image in the modal
+    function showModal(imgSrc) {
+      modalImage.src = imgSrc;
+      modal.classList.add('show');
+    }
+
+    // Close the modal when clicking the close button
+    closeBtn.addEventListener('click', function() {
+      modal.classList.remove('show');
+    });
+
+    // Function to delete an image from localStorage and gallery
+    function deleteImage(index) {
+      const images = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+      images.splice(index, 1);  // Remove the image from the array
+      localStorage.setItem('uploadedImages', JSON.stringify(images));  // Update localStorage
+
+      // Reload the gallery to reflect changes
+      loadImages();
+    }
+
+    // Load images from localStorage when the page is loaded
+    loadImages();
+  </script>
+
+</body>
+</html>
