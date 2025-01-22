@@ -13,12 +13,13 @@ body {
   align-items: center;
   color: white;
   overflow: hidden;
+  overflow: auto;
 }
 .background-frame {
   position: fixed;
   top: 0;
   left: 0;
-  width: 800vw;
+  width: 100vw;
   height: 100vw;
   border: none;
   z-index: -1; /* Send the iframe behind other content */
@@ -31,6 +32,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 20; /* Removes any margin at the top */
+  padding-top: 20;
 }
 
 /* Mobile-friendly styles */
@@ -88,7 +91,7 @@ button:hover {
 }
 
 #gallery {
-  margin-top: 20px;
+  margin-top: 5gi0px;
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
